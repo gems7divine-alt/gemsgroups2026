@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { CheckCircle2, CalendarCheck, ClipboardList, LogIn, LogOut, Send } from "lucide-react";
+import { CheckCircle2, CalendarCheck, ClipboardList, LogIn, LogOut, Power, Send } from "lucide-react";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import Reveal from "../../components/Reveal";
@@ -127,6 +127,14 @@ export default function EmployeeLogin() {
     sessionStorage.removeItem("gems_employee_id");
     sessionStorage.removeItem("gems_employee_name");
     window.location.hash = "#/dashboard";
+  };
+
+  const handleSignOut = () => {
+    sessionStorage.removeItem("gems_employee_auth");
+    sessionStorage.removeItem("gems_employee_id");
+    sessionStorage.removeItem("gems_employee_name");
+    sessionStorage.removeItem("gems_staff_auth");
+    window.location.hash = "#/";
   };
 
   const displaySession = activeSession || lastSession;
@@ -338,6 +346,15 @@ export default function EmployeeLogin() {
                     )}
                   </div>
                 )}
+
+                <button
+                  type="button"
+                  onClick={handleSignOut}
+                  className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full border border-gold/40 px-7 py-3 text-sm font-semibold text-gold transition-all duration-300 hover:bg-gold hover:text-deepnavy"
+                >
+                  <Power className="h-4 w-4" aria-hidden="true" />
+                  Sign Out
+                </button>
 
                 <div className="mt-6 text-center text-[13px]">
                   <button
