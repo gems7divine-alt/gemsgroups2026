@@ -126,7 +126,7 @@ export default function CoreServices() {
             const isLogo = isRacing || isMai;
             const isContain = isLogo || service.image?.includes("film") || service.image?.includes("travel");
             return (
-            <Reveal key={service.title} delay={(i % 2) * 120} className="h-full">
+            <Reveal key={service.title} delay={(i % 2) * 120} tilt={4} className="h-full">
               <article className="group grid h-full overflow-hidden rounded-2xl border border-gold/15 bg-darkblue sm:grid-cols-2">
                 <div className={`relative h-56 overflow-hidden sm:h-full sm:min-h-[340px] ${isContain ? "bg-white" : "bg-deepnavy"}`}>
                   <img

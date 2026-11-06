@@ -16,7 +16,7 @@ export default function TeamGrid() {
           </p>
         </Reveal>
 
-        <Reveal delay={120}>
+        <Reveal delay={120} tilt={3}>
           <article className="mx-auto mt-12 grid max-w-5xl overflow-hidden rounded-2xl border border-gold/25 bg-deepnavy shadow-[0_14px_40px_rgba(3,20,38,0.16)] md:grid-cols-2">
             <div className="relative min-h-[320px] md:min-h-[480px]">
               <img

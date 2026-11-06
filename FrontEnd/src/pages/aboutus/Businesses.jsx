@@ -1,4 +1,5 @@
 import Reveal from "../../components/Reveal";
+import Tilt3D from "../../components/Tilt3D";
 
 const BUSINESSES = [
   {
@@ -48,7 +49,8 @@ function BusinessRow({ hidden }) {
         const isLogo = isRacing || isMai;
         const isContain = isLogo || business.image?.includes("film") || business.image?.includes("travel");
         return (
-        <article
+        <Tilt3D
+          as="article"
           key={`${hidden ? "dup-" : ""}${business.title}`}
           className="group flex w-[280px] shrink-0 flex-col overflow-hidden rounded-2xl bg-deepnavy shadow-[0_12px_36px_rgba(3,20,38,0.18)] transition-colors duration-300 hover:border hover:border-gold/40 sm:w-[310px]"
         >
@@ -68,7 +70,7 @@ function BusinessRow({ hidden }) {
               {business.text}
             </p>
           </div>
-        </article>
+        </Tilt3D>
         );
       })}
     </div>

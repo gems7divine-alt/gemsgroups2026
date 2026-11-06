@@ -26,16 +26,17 @@ export default function GlobalPresence() {
       className="relative overflow-hidden bg-deepnavy"
     >
       {/* Bottom half of session.png: glowing world map */}
-      <div className="relative min-h-[640px] sm:min-h-[560px] md:aspect-[1741/452] md:min-h-0">
-        <img
-          src="/assets/session.png"
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
-          className="absolute inset-0 h-full w-full object-cover [object-position:50%_100%] md:object-bottom"
-        />
+      <div className="relative flex min-h-[640px] items-center sm:min-h-[560px] md:min-h-[460px] xl:min-h-[26vw]">
+        <div className="depth-scroll absolute inset-0 overflow-hidden" aria-hidden="true">
+          <img
+            src="/assets/session.png"
+            alt=""
+            loading="lazy"
+            className="absolute inset-x-0 bottom-0 h-[200%] w-full object-cover [object-position:50%_100%] md:object-bottom"
+          />
+        </div>
         <div
-          className="absolute inset-0 bg-deepnavy/35"
+          className="absolute inset-0 bg-deepnavy/35 md:bg-transparent md:bg-gradient-to-r md:from-deepnavy/85 md:via-deepnavy/45 md:to-deepnavy/25"
           aria-hidden="true"
         />
         <div
@@ -43,7 +44,7 @@ export default function GlobalPresence() {
           aria-hidden="true"
         />
 
-        <div className="relative z-10 mx-auto grid h-full w-full max-w-7xl gap-8 px-5 py-14 sm:px-8 md:grid-cols-2 md:items-center lg:px-12">
+        <div className="relative z-10 mx-auto grid w-full max-w-7xl gap-8 px-5 py-14 sm:px-8 md:grid-cols-2 md:items-center lg:px-12">
           <Reveal className="md:pb-10">
             <p className="text-center text-[11px] font-semibold uppercase tracking-[0.45em] text-gold sm:text-xs md:text-left">
               Our Global Presence
@@ -53,7 +54,7 @@ export default function GlobalPresence() {
             </h2>
           </Reveal>
 
-          <Reveal delay={150} className="justify-self-stretch md:justify-self-end md:w-[380px]">
+          <Reveal delay={150} tilt={5} className="justify-self-stretch md:justify-self-end md:w-[380px]">
             <div className="rounded-2xl border border-gold/25 bg-deepnavy/70 p-6 backdrop-blur-md sm:p-7">
               <ul className="space-y-6">
                 {POINTS.map((point) => (

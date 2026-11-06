@@ -72,7 +72,7 @@ export default function Dashboard() {
 
           <div className="mx-auto mt-12 grid max-w-4xl gap-6 md:grid-cols-2">
             {OPTIONS.map((option, i) => (
-              <Reveal key={option.id} delay={i * 120} className="h-full">
+              <Reveal key={option.id} delay={i * 120} tilt className="h-full">
                 <button
                   type="button"
                   onClick={() => handleOptionClick(option.id)}

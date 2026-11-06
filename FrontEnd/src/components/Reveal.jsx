@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from "react";
+import Tilt3D from "./Tilt3D";
 
-/** Fade-up wrapper that triggers once when scrolled into view. */
-export default function Reveal({ as: Tag = "div", delay = 0, className = "", children, ...rest }) {
+/**
+ * Swings content up in 3D once when scrolled into view.
+ * Pass `tilt` to also tilt it toward the mouse, or `tilt={4}` to set the maximum angle.
+ */
+export default function Reveal({ as: Tag = "div", delay = 0, tilt = false, className = "", children, ...rest }) {
   const ref = useRef(null);
   const [visible, setVisible] = useState(
     () => typeof IntersectionObserver === "undefined"
@@ -31,7 +35,13 @@ export default function Reveal({ as: Tag = "div", delay = 0, className = "", chi
       className={`reveal${visible ? " is-visible" : ""}${className ? ` ${className}` : ""}`}
       {...rest}
     >
-      {children}
+      {tilt ? (
+        <Tilt3D className="h-full" max={tilt === true ? undefined : tilt}>
+          {children}
+        </Tilt3D>
+      ) : (
+        children
+      )}
     </Tag>
   );
 }

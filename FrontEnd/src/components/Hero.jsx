@@ -1,15 +1,64 @@
+import { useEffect, useRef } from "react";
 import { ArrowRight, Play } from "lucide-react";
 import { AnimatedWords } from "./Reveal";
+import Gem3D from "./Gem3D";
+import GoldParticles from "./GoldParticles";
+import { prefersReducedMotion } from "./motion";
+
+/** Feeds the hero's depth layers from the mouse and from scrolling. */
+function useHeroDepth(sectionRef, pointer) {
+  useEffect(() => {
+    if (prefersReducedMotion()) return undefined;
+    const section = sectionRef.current;
+    const target = { x: 0, y: 0 };
+    let raf = 0;
+
+    const frame = () => {
+      const p = pointer.current;
+      p.x += (target.x - p.x) * 0.07;
+      p.y += (target.y - p.y) * 0.07;
+      section.style.setProperty("--hero-x", p.x.toFixed(4));
+      section.style.setProperty("--hero-y", p.y.toFixed(4));
+      const settled = Math.abs(target.x - p.x) + Math.abs(target.y - p.y) < 0.001;
+      raf = settled ? 0 : requestAnimationFrame(frame);
+    };
+    const onPointerMove = (e) => {
+      if (e.pointerType !== "mouse") return;
+      target.x = (e.clientX / window.innerWidth) * 2 - 1;
+      target.y = (e.clientY / window.innerHeight) * 2 - 1;
+      if (!raf) raf = requestAnimationFrame(frame);
+    };
+    const onScroll = () => {
+      const progress = Math.min(1, window.scrollY / (section.offsetHeight || 1));
+      section.style.setProperty("--hero-scroll", progress.toFixed(4));
+    };
+
+    section.addEventListener("pointermove", onPointerMove);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => {
+      cancelAnimationFrame(raf);
+      section.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [sectionRef, pointer]);
+}
 
 export default function Hero() {
+  const sectionRef = useRef(null);
+  const pointer = useRef({ x: 0, y: 0 });
+  useHeroDepth(sectionRef, pointer);
+
   return (
-    <section id="home" aria-label="GEMS Groups introduction" className="relative flex min-h-[100svh] items-center overflow-hidden bg-deepnavy">
+    <section ref={sectionRef} id="home" aria-label="GEMS Groups introduction" className="relative flex min-h-[100svh] items-center overflow-hidden bg-deepnavy">
       {/* Responsive background: mobilescreen.png < 768px, systembackground.png >= 768px */}
-      <div className="hero-bg hero-zoom absolute inset-0" aria-hidden="true" />
+      <div className="hero-depth-bg absolute -inset-[4%]" aria-hidden="true">
+        <div className="hero-bg hero-zoom absolute inset-0" />
+      </div>
 
       {/* Readability overlays — left-only on desktop so globe/city/vehicle stay visible */}
       <div
-        className="absolute inset-0 bg-gradient-to-b from-deepnavy/70 via-deepnavy/20 to-deepnavy/90 md:bg-gradient-to-r md:from-deepnavy/90 md:via-deepnavy/55 md:to-transparent"
+        className="absolute inset-0 bg-gradient-to-b from-deepnavy/70 via-deepnavy/55 to-deepnavy/90 md:bg-gradient-to-r md:from-deepnavy/90 md:via-deepnavy/55 md:to-transparent"
         aria-hidden="true"
       />
       <div
@@ -17,14 +66,19 @@ export default function Hero() {
         aria-hidden="true"
       />
 
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-20 pt-28 sm:px-8 md:pb-24 md:pt-36 lg:px-12">
-        <div className="max-w-xl md:max-w-2xl">
-          <p
-            className="anim-fade-up text-sm font-semibold uppercase tracking-[0.5em] text-gold sm:text-base md:text-lg"
+      <GoldParticles pointer={pointer} className="pointer-events-none absolute inset-0 h-full w-full mix-blend-screen" />
+
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-24 pt-24 sm:px-8 md:pb-24 md:pt-36 lg:px-12">
+        <div className="hero-depth-text max-w-xl md:max-w-2xl">
+          <div
+            className="anim-fade-up flex items-center gap-3 md:flex-col md:items-start"
             style={{ animationDelay: "0.1s" }}
           >
-            GEMS&nbsp;&nbsp;GROUPS
-          </p>
+            <Gem3D className="gem-glow h-10 w-10 shrink-0 md:-ml-1 md:h-20 md:w-20" />
+            <p className="text-sm font-semibold uppercase tracking-[0.5em] text-gold sm:text-base md:text-lg">
+              GEMS&nbsp;&nbsp;GROUPS
+            </p>
+          </div>
 
           <h1 className="mt-4 font-serif text-4xl font-bold leading-[1.05] text-cream sm:text-5xl md:text-6xl lg:text-7xl">
             <AnimatedWords text="SIX INDUSTRIES." baseDelay={250} />

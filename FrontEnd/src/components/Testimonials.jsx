@@ -50,7 +50,7 @@ export default function Testimonials() {
 
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           {TESTIMONIALS.map((t, i) => (
-            <Reveal key={t.name} delay={i * 120} className="h-full">
+            <Reveal key={t.name} delay={i * 120} tilt className="h-full">
             <figure
               className="h-full rounded-2xl border border-deepnavy/10 bg-white p-6 shadow-[0_10px_30px_rgba(3,20,38,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(3,20,38,0.12)] sm:p-7"
             >

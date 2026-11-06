@@ -72,7 +72,7 @@ export default function AiChatAssistant() {
   return (
     <div className="fixed bottom-24 right-5 z-50 flex flex-col items-end gap-3">
       {open && (
-        <div className="flex h-[420px] w-[320px] flex-col overflow-hidden rounded-2xl border border-gold/25 bg-deepnavy shadow-[0_18px_50px_rgba(0,0,0,0.45)]">
+        <div className="flex h-[min(420px,calc(100svh-11rem))] w-[min(320px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-2xl border border-gold/25 bg-deepnavy shadow-[0_18px_50px_rgba(0,0,0,0.45)]">
           <div className="flex items-center gap-3 border-b border-gold/15 bg-darkblue px-4 py-3">
             <img
               src="/assets/gems_groups_logo.png"

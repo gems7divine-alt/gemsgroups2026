@@ -190,8 +190,8 @@ export default function EmployeeLogin() {
           className="absolute inset-0 bg-gradient-to-r from-deepnavy/95 via-deepnavy/85 to-deepnavy/60"
           aria-hidden="true"
         />
-        <div className="relative z-10 mx-auto w-full max-w-6xl grid gap-6 lg:grid-cols-2 lg:items-start">
-          <Reveal>
+        <div className="relative z-10 mx-auto grid w-full max-w-6xl grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
+          <Reveal className="min-w-0">
             <div className="overflow-hidden rounded-2xl border border-gold/25 bg-deepnavy shadow-[0_14px_40px_rgba(3,20,38,0.16)]">
               <div className="p-7 sm:p-9">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-gold">
@@ -368,7 +368,7 @@ export default function EmployeeLogin() {
               </div>
             </div>
           </Reveal>
-          <Reveal delay={120}>
+          <Reveal delay={120} className="min-w-0">
             <EmployeeGraph
               employeeId={employeeId}
               employeeName={employeeName}

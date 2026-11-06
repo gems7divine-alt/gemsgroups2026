@@ -109,7 +109,7 @@ export default function employeegraph({ employeeId, employeeName, sessions = [] 
 
         {/* Top total strip — 30 hours / week target */}
         <div className="mt-5 rounded-2xl border border-gold/25 bg-white/5 p-5">
-          <div className="flex items-center justify-between gap-3 text-sm">
+          <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-sm">
             <span className="flex items-center gap-2 font-semibold uppercase tracking-[0.12em] text-cream/70">
               <Clock3 className="h-4 w-4 text-gold" aria-hidden="true" />
               Total Week Hours
@@ -153,15 +153,15 @@ export default function employeegraph({ employeeId, employeeName, sessions = [] 
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cream/60">
             Each day: {DAILY_TARGET_HOURS}h target — completed vs pending
           </p>
-          <div className="mt-3 flex h-auto items-end justify-between gap-2 sm:gap-3">
+          <div className="mt-3 flex h-auto items-end justify-between gap-1 sm:gap-3">
             {dayHours.map((h, i) => {
               const pct = Math.min(100, (h / DAILY_TARGET_HOURS) * 100);
               const done = h >= DAILY_TARGET_HOURS;
               const left = Math.max(0, DAILY_TARGET_HOURS - h);
               const isToday = i === todayIndex;
               return (
-                <div key={DAY_LABELS[i]} className="flex flex-1 flex-col items-center justify-end">
-                  <span className={`mb-1 text-[11px] font-semibold ${done ? "text-green-300" : h > 0 ? "text-gold" : "text-cream/35"}`}>
+                <div key={DAY_LABELS[i]} className="flex min-w-0 flex-1 flex-col items-center justify-end text-center">
+                  <span className={`mb-1 text-[10px] font-semibold leading-tight sm:text-[11px] ${done ? "text-green-300" : h > 0 ? "text-gold" : "text-cream/35"}`}>
                     {h > 0 ? formatShort(h) : "—"}
                   </span>
                   <div
@@ -182,7 +182,7 @@ export default function employeegraph({ employeeId, employeeName, sessions = [] 
                     />
                   </div>
                   <span
-                    className={`mt-2 text-[11px] font-semibold uppercase tracking-[0.08em] ${
+                    className={`mt-2 text-[9px] font-semibold uppercase sm:text-[11px] sm:tracking-[0.08em] ${
                       isToday ? "text-gold" : "text-cream/55"
                     }`}
                   >
@@ -190,12 +190,12 @@ export default function employeegraph({ employeeId, employeeName, sessions = [] 
                     {isToday ? " •" : ""}
                   </span>
                   {done ? (
-                    <span className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold text-green-300">
-                      <CheckCircle2 className="h-3 w-3" aria-hidden="true" />
+                    <span className="mt-1 inline-flex items-center gap-1 text-[9px] font-semibold text-green-300 sm:text-[10px]">
+                      <CheckCircle2 className="hidden h-3 w-3 sm:block" aria-hidden="true" />
                       Done
                     </span>
                   ) : (
-                    <span className="mt-1 text-[10px] text-mutedwhite/50">
+                    <span className="mt-1 text-[9px] leading-tight text-mutedwhite/50 sm:text-[10px]">
                       {h > 0 ? `${left.toFixed(1)}h left` : `${DAILY_TARGET_HOURS}h to do`}
                     </span>
                   )}
@@ -203,7 +203,7 @@ export default function employeegraph({ employeeId, employeeName, sessions = [] 
               );
             })}
           </div>
-          <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-3 text-[11px] text-mutedwhite/50">
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-t border-white/10 pt-3 text-[11px] text-mutedwhite/50">
             <span>Green = 5h completed that day. Gold = partial.</span>
             <span className="font-semibold text-cream/60">Target: {WEEK_TARGET_HOURS}h/week</span>
           </div>

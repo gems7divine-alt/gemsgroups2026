@@ -81,7 +81,7 @@ export default function AdminDashboard() {
           </Reveal>
 
           <div className="mx-auto mt-12 grid max-w-6xl gap-6 md:grid-cols-3">
-            <Reveal delay={0} className="h-full">
+            <Reveal delay={0} tilt className="h-full">
               <button
                 type="button"
                 onClick={() => {
@@ -105,7 +105,7 @@ export default function AdminDashboard() {
                 </span>
               </button>
             </Reveal>
-            <Reveal delay={120} className="h-full">
+            <Reveal delay={120} tilt className="h-full">
               <button
                 type="button"
                 onClick={() => {
@@ -129,7 +129,7 @@ export default function AdminDashboard() {
                 </span>
               </button>
             </Reveal>
-            <Reveal delay={240} className="h-full">
+            <Reveal delay={240} tilt className="h-full">
               <button
                 type="button"
                 onClick={() => {

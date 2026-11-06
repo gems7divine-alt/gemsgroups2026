@@ -29,7 +29,7 @@ export default function About() {
             src="/assets/gems.png"
             alt="GEMS Groups corporate headquarters"
             loading="lazy"
-            className="absolute inset-0 h-full w-full object-cover"
+            className="depth-scroll absolute inset-0 h-full w-full object-cover"
           />
         </Reveal>
 

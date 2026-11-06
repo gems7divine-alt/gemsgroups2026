@@ -5,16 +5,17 @@ export default function Vision() {
   return (
     <section
       aria-label="Our vision"
-      className="relative flex min-h-[500px] items-center overflow-hidden bg-deepnavy md:aspect-[1741/451] md:min-h-0"
+      className="relative flex min-h-[500px] items-center overflow-hidden bg-deepnavy md:min-h-[420px] xl:min-h-[26vw]"
     >
       {/* Top half of session.png: mountain sunrise */}
-      <img
-        src="/assets/session.png"
-        alt=""
-        aria-hidden="true"
-        loading="lazy"
-        className="absolute inset-0 h-full w-full object-cover [object-position:70%_0%] md:object-top"
-      />
+      <div className="depth-scroll absolute inset-0 overflow-hidden" aria-hidden="true">
+        <img
+          src="/assets/session.png"
+          alt=""
+          loading="lazy"
+          className="absolute inset-x-0 top-0 h-[200%] w-full object-cover [object-position:70%_0%] md:object-top"
+        />
+      </div>
       <div
         className="absolute inset-0 bg-gradient-to-r from-deepnavy/90 via-deepnavy/45 to-deepnavy/10"
         aria-hidden="true"

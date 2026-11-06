@@ -151,26 +151,12 @@ body {
   }
 }
 
-@keyframes services-scroll-y {
-  from {
-    transform: translateY(-50%);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
 .animate-services-x {
   animation: services-scroll-x 32s linear infinite;
 }
 
-.animate-services-y {
-  animation: services-scroll-y 30s linear infinite;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .animate-services-x,
-  .animate-services-y {
+  .animate-services-x {
     animation: none;
   }
 }
@@ -226,10 +212,11 @@ body {
 /* Scroll-triggered text reveal */
 .reveal {
   opacity: 0;
-  transform: translateY(26px);
+  transform: perspective(1000px) translateY(30px) rotateX(12deg);
+  transform-origin: 50% 100%;
   transition:
     opacity 0.8s ease,
-    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
   transition-delay: var(--reveal-delay, 0ms);
   will-change: opacity, transform;
 }
@@ -237,6 +224,7 @@ body {
 .reveal.is-visible {
   opacity: 1;
   transform: none;
+  will-change: auto;
 }
 
 /* Word-by-word loading reveal */
@@ -276,5 +264,137 @@ body {
   .word-inner {
     opacity: 1;
     animation: none;
+  }
+}
+
+/* Forms: below 16px, iOS Safari zooms the whole page when a field is focused */
+@media (max-width: 767px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* 3D: card tilt toward the mouse */
+.tilt {
+  position: relative;
+  transform: perspective(1000px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tilt.is-tilting {
+  transition: transform 0.12s ease-out;
+}
+
+.tilt-glare {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  border-radius: 1rem;
+  background: radial-gradient(
+    circle at var(--glare-x, 50%) var(--glare-y, 50%),
+    rgba(255, 244, 214, 0.2),
+    transparent 58%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.tilt.is-tilting .tilt-glare {
+  opacity: 1;
+}
+
+/* 3D: hero depth layers, driven by --hero-x, --hero-y and --hero-scroll */
+.hero-depth-bg {
+  transform: perspective(1400px)
+    translate3d(
+      calc(var(--hero-x, 0) * -14px),
+      calc(var(--hero-y, 0) * -10px + var(--hero-scroll, 0) * 70px),
+      0
+    )
+    rotateY(calc(var(--hero-x, 0) * 1.4deg))
+    rotateX(calc(var(--hero-y, 0) * -1deg));
+}
+
+.hero-depth-text {
+  transform: perspective(1400px)
+    translate3d(
+      calc(var(--hero-x, 0) * 10px),
+      calc(var(--hero-y, 0) * 7px + var(--hero-scroll, 0) * -50px),
+      0
+    )
+    rotateY(calc(var(--hero-x, 0) * 2.5deg))
+    rotateX(calc(var(--hero-y, 0) * -2deg));
+}
+
+.gem-glow {
+  filter: drop-shadow(0 0 16px rgba(217, 164, 65, 0.55));
+}
+
+/* 3D: rotating service ring */
+.ring-viewport {
+  perspective: 1000px;
+  padding-block: 0.5rem;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  mask-image: linear-gradient(to right, transparent, black 7%, black 93%, transparent);
+}
+
+.ring-viewport.is-dragging {
+  cursor: grabbing;
+}
+
+.ring-viewport img {
+  pointer-events: none;
+}
+
+.ring-3d {
+  display: grid;
+  justify-items: center;
+  transform-style: preserve-3d;
+  transform: translateZ(calc(var(--ring-radius, 300px) * -1)) rotateY(var(--ring-angle, 0deg));
+}
+
+.ring-card {
+  grid-area: 1 / 1;
+  width: clamp(230px, 68vw, 340px);
+  transform: rotateY(var(--ring-index)) translateZ(var(--ring-radius, 300px));
+  backface-visibility: hidden;
+}
+
+@media (min-width: 768px) {
+  .ring-viewport {
+    perspective: 1500px;
+  }
+}
+
+/* 3D: images drift at their own depth while scrolling, where browsers support it */
+@keyframes depth-scroll {
+  from {
+    transform: translateY(-4%) scale(1.12);
+  }
+  to {
+    transform: translateY(4%) scale(1.12);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .depth-scroll {
+      animation: depth-scroll linear both;
+      animation-timeline: view();
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-depth-bg,
+  .hero-depth-text,
+  .tilt {
+    transform: none;
   }
 }

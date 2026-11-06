@@ -32,7 +32,7 @@ export default function MobileMenu({ open, onClose }) {
   return (
     <div
       id="mobile-menu"
-      className="anim-fade-in border-t border-gold/15 bg-deepnavy/95 backdrop-blur-xl lg:hidden"
+      className="anim-fade-in max-h-[calc(100svh-4rem)] overflow-y-auto border-t border-gold/15 bg-deepnavy/95 backdrop-blur-xl md:max-h-[calc(100svh-5rem)] lg:hidden"
     >
       <nav aria-label="Mobile" className="space-y-1 px-5 py-4">
         {LINKS.map((link) => {

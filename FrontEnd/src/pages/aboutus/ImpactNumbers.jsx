@@ -19,7 +19,7 @@ export default function ImpactNumbers() {
         </Reveal>
         <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
           {STATS.map((stat, i) => (
-            <Reveal key={stat.label} delay={i * 100}>
+            <Reveal key={stat.label} delay={i * 100} tilt>
               <div className="rounded-2xl bg-white px-4 py-7 text-center shadow-[0_10px_30px_rgba(3,20,38,0.06)]">
                 <stat.icon className="mx-auto h-7 w-7 text-[#C99B2E]" aria-hidden="true" />
                 <p className="mt-3 font-serif text-2xl font-bold text-deepnavy sm:text-3xl">

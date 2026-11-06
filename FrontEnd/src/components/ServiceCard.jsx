@@ -6,7 +6,7 @@ export default function ServiceCard({ icon: Icon, title, description, image, ima
   const fit = imageFit || (isLogo ? "object-contain object-center p-3" : isContain ? "object-contain object-center" : "object-cover object-center");
   const bg = imageBg || (isContain ? "bg-white" : "bg-deepnavy");
   return (
-    <article className="group w-full overflow-hidden rounded-2xl border border-gold/20 bg-white/[0.04] backdrop-blur-sm transition-all duration-300 hover:border-gold/50 hover:shadow-[0_0_30px_rgba(217,164,65,0.18)]">
+    <article className="group h-full w-full overflow-hidden rounded-2xl border border-gold/20 bg-darkblue transition-all duration-300 hover:border-gold/50 hover:shadow-[0_0_30px_rgba(217,164,65,0.18)]">
       {image && (
         <div className={`relative h-48 w-full overflow-hidden ${bg}`}>
           <img

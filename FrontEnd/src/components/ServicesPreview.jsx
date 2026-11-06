@@ -1,5 +1,5 @@
 import { Bot, Trophy, Clapperboard, HeartHandshake, Megaphone, Plane } from "lucide-react";
-import ServiceCard from "./ServiceCard";
+import ServiceCarousel3D from "./ServiceCarousel3D";
 import Reveal from "./Reveal";
 
 const SERVICES = [
@@ -47,50 +47,6 @@ const SERVICES = [
   },
 ];
 
-function ServiceRow({ hidden }) {
-  return (
-    <div className="flex gap-5 pr-5" aria-hidden={hidden || undefined}>
-      {SERVICES.map((service, i) => (
-        <Reveal
-          key={`${hidden ? "dup-" : ""}${service.title}`}
-          delay={hidden ? 0 : i * 90}
-          className="w-[280px] shrink-0 sm:w-[320px] lg:w-[340px]"
-        >
-          <ServiceCard
-            icon={service.icon}
-            title={service.title}
-            description={service.description}
-            image={service.image}
-            imageAlt={service.imageAlt}
-          />
-        </Reveal>
-      ))}
-    </div>
-  );
-}
-
-function ServiceColumn({ hidden }) {
-  return (
-    <div className="flex flex-col gap-5 pb-5" aria-hidden={hidden || undefined}>
-      {SERVICES.map((service, i) => (
-        <Reveal
-          key={`${hidden ? "dup-" : ""}${service.title}`}
-          delay={hidden ? 0 : i * 90}
-          className="w-full"
-        >
-          <ServiceCard
-            icon={service.icon}
-            title={service.title}
-            description={service.description}
-            image={service.image}
-            imageAlt={service.imageAlt}
-          />
-        </Reveal>
-      ))}
-    </div>
-  );
-}
-
 export default function ServicesPreview() {
   return (
     <section id="services" aria-label="Our services" className="relative overflow-x-clip bg-deepnavy py-16 md:py-24">
@@ -110,21 +66,7 @@ export default function ServicesPreview() {
         </Reveal>
       </div>
 
-      {/* Desktop / tablet: horizontal left-to-right loop */}
-      <div className="mt-10 hidden overflow-hidden md:block [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
-        <div className="animate-services-x flex w-max hover:[animation-play-state:paused]">
-          <ServiceRow hidden={false} />
-          <ServiceRow hidden />
-        </div>
-      </div>
-
-      {/* Mobile: vertical top-to-bottom loop */}
-      <div className="mx-auto mt-10 h-[540px] overflow-hidden px-5 sm:px-8 md:hidden [mask-image:linear-gradient(to_bottom,transparent,black_8%,black_92%,transparent)]">
-        <div className="animate-services-y flex w-full flex-col hover:[animation-play-state:paused]">
-          <ServiceColumn hidden={false} />
-          <ServiceColumn hidden />
-        </div>
-      </div>
+      <ServiceCarousel3D items={SERVICES} />
     </section>
   );
 }
