@@ -1,0 +1,280 @@
+@import "tailwindcss";
+
+@theme {
+  --color-deepnavy: #031426;
+  --color-darkblue: #071d33;
+  --color-gold: #d9a441;
+  --color-lightgold: #f5d58a;
+  --color-cream: #fff4d6;
+  --color-mutedwhite: #d9dee7;
+  --font-serif: "Playfair Display", "Georgia", serif;
+  --font-sans: "Inter", "Montserrat", system-ui, sans-serif;
+  --font-script: "Great Vibes", cursive;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  overflow-x: clip;
+  background-color: #031426;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: #d9dee7;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100svh;
+  background-color: #031426;
+}
+
+::selection {
+  background: #d9a441;
+  color: #031426;
+}
+
+/* Hero background: mobile first, desktop override. Preserves artwork. */
+.hero-bg {
+  background-image: url("/assets/mobilescreen.png");
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+}
+
+@media (min-width: 768px) {
+  .hero-bg {
+    background-image: url("/assets/systembackground.png");
+    background-size: cover;
+    background-position: center center;
+  }
+}
+
+@media (min-width: 1440px) {
+  .hero-bg {
+    background-position: center 30%;
+  }
+}
+
+/* Very subtle cinematic zoom — does not cover/distract from artwork */
+@keyframes hero-zoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.05);
+  }
+}
+
+.hero-zoom {
+  animation: hero-zoom 24s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-zoom {
+    animation: none;
+  }
+}
+
+/* Entrance animations */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.anim-fade-up {
+  opacity: 0;
+  animation: fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.anim-fade-in {
+  opacity: 0;
+  animation: fade-in 1.1s ease forwards;
+}
+
+.anim-navbar {
+  opacity: 0;
+  animation: fade-in 0.8s ease forwards;
+}
+
+/* Gold underline for nav links */
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  height: 2px;
+  width: 100%;
+  background: #d9a441;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-link:focus-visible::after,
+.nav-link-active::after {
+  transform: scaleX(1);
+}
+
+/* Services loops: horizontal on desktop, vertical top-to-down on mobile */
+@keyframes services-scroll-x {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes services-scroll-y {
+  from {
+    transform: translateY(-50%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-services-x {
+  animation: services-scroll-x 32s linear infinite;
+}
+
+.animate-services-y {
+  animation: services-scroll-y 30s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-services-x,
+  .animate-services-y {
+    animation: none;
+  }
+}
+
+/* About hero background: mobile first, desktop override */
+.about-hero-bg {
+  background-image: url("/assets/aboutmobile.png");
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+}
+
+@media (min-width: 768px) {
+  .about-hero-bg {
+    background-image: url("/assets/aboutgems.png");
+    background-size: cover;
+    background-position: center center;
+  }
+}
+
+/* Leadership hero background: mobile first, desktop override */
+.leadership-hero-bg {
+  background-image: url("/assets/mobileleadership.png");
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+}
+
+@media (min-width: 768px) {
+  .leadership-hero-bg {
+    background-image: url("/assets/systemleadership.png");
+    background-size: cover;
+    background-position: center center;
+  }
+}
+
+/* Contact hero background: mobile first, desktop override */
+.contact-hero-bg {
+  background-image: url("/assets/mobilecontact.png");
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+}
+
+@media (min-width: 768px) {
+  .contact-hero-bg {
+    background-image: url("/assets/systemcontact.png");
+    background-size: cover;
+    background-position: center center;
+  }
+}
+
+/* Scroll-triggered text reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Word-by-word loading reveal */
+@keyframes word-rise {
+  from {
+    opacity: 0;
+    transform: translateY(110%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.word-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-bottom: 0.09em;
+  margin-bottom: -0.09em;
+}
+
+.word-inner {
+  display: inline-block;
+  opacity: 0;
+  animation: word-rise 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: var(--word-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .word-inner {
+    opacity: 1;
+    animation: none;
+  }
+}
