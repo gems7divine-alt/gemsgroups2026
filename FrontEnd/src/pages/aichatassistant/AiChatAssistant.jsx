@@ -1,28 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Send, X, Sparkles, MessageSquarePlus, Trash2 } from "lucide-react";
+import { askAssistant } from "../../services/chatapi";
 
-function botReply(input) {
-  const text = input.toLowerCase();
-  if (/(hi|hello|hey|vanakkam)/.test(text))
-    return "Hello! Welcome to GEMS Groups. Ask me about our services, leadership, or how to contact us.";
-  if (/(service|what.*offer|business)/.test(text))
-    return "We offer Software & AI Automation, Travel Services, Digital Marketing, Film Production, Gems Racing and education support via Mai Foundation. See the Services page for details.";
-  if (/(contact|phone|whatsapp|email|address|location)/.test(text))
-    return "You can reach us at +91 73973 82074, info@gemsgroups.in, Chennai, Tamil Nadu. Or tap the WhatsApp button below to chat instantly.";
-  if (/(leader|ceo|founder|david|management|team)/.test(text))
-    return "Our Founder & CEO is David Jabee. See the Leadership page for his vision and message.";
-  if (/(about|company|gems)/.test(text))
-    return "GEMS Groups is a diversified global company driven by innovation, creativity and social impact across technology, travel, media and more.";
-  if (/(job|career|staff|vacancy|apply|join)/.test(text))
-    return "For careers, visit the Contact page and send us your details — our team will get back to you.";
-  if (/(thank|thanks|nandri)/.test(text))
-    return "You're welcome! Anything else I can help with?";
-  if (/(bye|goodbye)/.test(text))
-    return "Goodbye! Have a great day. We're here whenever you need us.";
-  return "Thanks for asking! For detailed help, contact us at +91 73973 82074 or info@gemsgroups.in — or ask about services, leadership, or contact info.";
-}
+const ERROR_REPLY =
+  "Sorry, I can't answer right now. Please try again, or contact us at +91 73973 82074 or info@gemsgroups.in.";
 
-const SUGGESTIONS = ["Our services", "Contact info", "Leadership"];
+const SUGGESTIONS = ["Our services", "Contact info", "Who is the owner?"];
 
 const INITIAL_MESSAGES = [
   {
@@ -37,6 +20,7 @@ export default function AiChatAssistant() {
   const [typing, setTyping] = useState(false);
   const [messages, setMessages] = useState(INITIAL_MESSAGES);
   const bodyRef = useRef(null);
+  const requestRef = useRef(null);
 
   useEffect(() => {
     if (bodyRef.current) {
@@ -44,26 +28,52 @@ export default function AiChatAssistant() {
     }
   }, [messages, typing, open]);
 
-  const send = (raw) => {
+  // Stop waiting for a reply if the widget is removed from the page.
+  useEffect(() => () => requestRef.current?.abort(), []);
+
+  const send = async (raw) => {
     const text = (raw ?? input).trim();
     if (!text || typing) return;
+
+    // The greeting and error notices are not part of the real conversation.
+    const history = messages
+      .filter((m) => !INITIAL_MESSAGES.includes(m) && !m.failed)
+      .map((m) => ({
+        role: m.from === "user" ? "user" : "assistant",
+        content: m.text,
+      }));
+
     setMessages((m) => [...m, { from: "user", text }]);
     setInput("");
     setTyping(true);
-    const answer = botReply(text);
-    setTimeout(() => {
-      setMessages((m) => [...m, { from: "bot", text: answer }]);
-      setTyping(false);
-    }, 650);
+
+    const controller = new AbortController();
+    requestRef.current = controller;
+    try {
+      const { answer, summary, points } = await askAssistant(
+        text,
+        history,
+        controller.signal
+      );
+      setMessages((m) => [...m, { from: "bot", text: answer, summary, points }]);
+    } catch (error) {
+      // New Chat or Clear cancelled this request, so its reply is not wanted.
+      if (controller.signal.aborted) return;
+      console.error("AI assistant request failed:", error);
+      setMessages((m) => [...m, { from: "bot", text: ERROR_REPLY, failed: true }]);
+    }
+    setTyping(false);
   };
 
   const handleNewChat = () => {
+    requestRef.current?.abort();
     setMessages(INITIAL_MESSAGES);
     setInput("");
     setTyping(false);
   };
 
   const handleClear = () => {
+    requestRef.current?.abort();
     setMessages([]);
     setInput("");
     setTyping(false);
@@ -125,15 +135,28 @@ export default function AiChatAssistant() {
             )}
             {messages.map((m, i) => (
               <div key={i} className={`flex ${m.from === "user" ? "justify-end" : "justify-start"}`}>
-                <p
-                  className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-[13px] leading-relaxed ${
+                <div
+                  className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-3.5 py-2.5 text-[13px] leading-relaxed ${
                     m.from === "user"
                       ? "rounded-br-md bg-gold text-deepnavy"
                       : "rounded-bl-md border border-white/10 bg-white/5 text-cream"
                   }`}
                 >
-                  {m.text}
-                </p>
+                  {/* Greetings, user messages and errors only have plain text. */}
+                  {m.summary ?? (m.points ? null : m.text)}
+                  {m.points?.length > 0 && (
+                    <ul className={`list-disc space-y-1.5 pl-4 ${m.summary ? "mt-2" : ""}`}>
+                      {m.points.map((point, j) => (
+                        <li key={j}>
+                          {point.title && (
+                            <span className="font-semibold text-gold">{point.title}: </span>
+                          )}
+                          {point.detail}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
               </div>
             ))}
             {typing && (
@@ -169,6 +192,7 @@ export default function AiChatAssistant() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask something…"
+                maxLength={1000}
                 aria-label="Type your message"
                 className="min-w-0 flex-1 rounded-full border border-gold/30 bg-white/5 px-4 py-2.5 text-[13px] text-cream placeholder:text-cream/40 outline-none focus:border-gold"
               />
